@@ -1,32 +1,32 @@
 const nodemailer = require("nodemailer");
 
 const mailSender = async (email, title, body) => {
-    try{
-        // Create a transporter to send emails
+    try {
         let transporter = nodemailer.createTransport({
-            host:process.env.MAIL_HOST,
-            auth:{
+            host: process.env.MAIL_HOST,
+            port: 465, // Direct 465 use karein Render ke liye
+            secure: true, // 465 ke saath true zaroori hai
+            auth: {
                 user: process.env.MAIL_USER,
                 pass: process.env.MAIL_PASS,
             },
-            secure: false, 
             tls: {
-            rejectUnauthorized: false
-        }
+                rejectUnauthorized: false
+            }
         });
 
-        // send mail
         let info = await transporter.sendMail({
-            from: 'StudyByte',
-            to:`${email}`,
+            from: '"StudyByte" <mayanknarnoliya41@gmail.com>', // Proper format
+            to: `${email}`,
             subject: `${title}`,
             html: `${body}`,
-        })
-        console.log(info);
+        });
+
+        console.log("Email Info: ", info);
         return info;
-    }
-    catch(error) {
-        console.log(error.message);
+    } catch (error) {
+        console.log("Error in mailSender: ", error.message);
+        return error; // Error return karein taaki crash na ho
     }
 }
 
