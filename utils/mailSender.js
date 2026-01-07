@@ -4,7 +4,7 @@ const mailSender = async (email, title, body) => {
     try {
         let transporter = nodemailer.createTransport({
             host: process.env.MAIL_HOST,
-            port: 465, // Direct 465 use karein Render ke liye
+            port: Number(process.env.MAIL_PORT) || 465, // Direct 465 use karein Render ke liye
             secure: true, // 465 ke saath true zaroori hai
             auth: {
                 user: process.env.MAIL_USER,
