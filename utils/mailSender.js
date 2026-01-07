@@ -3,15 +3,18 @@ const nodemailer = require("nodemailer");
 const mailSender = async (email, title, body) => {
     try {
         let transporter = nodemailer.createTransport({
-            host: process.env.MAIL_HOST, // Yahan 74.125.142.108 wala IP kaam karega
-            port: 587, 
-            secure: false, // Port 587 ke liye false hona chahiye
+            host: process.env.MAIL_HOST,
+            port: 587,
+            secure: false, // 587 ke liye false hi rahega
             auth: {
                 user: process.env.MAIL_USER,
                 pass: process.env.MAIL_PASS,
             },
+            // Isse connection wait karega aur fail nahi hoga turant
+            connectionTimeout: 10000, 
+            greetingTimeout: 10000,
             tls: {
-                rejectUnauthorized: false // Isse self-signed certificate errors nahi aayenge
+                rejectUnauthorized: false
             }
         });
 
@@ -22,10 +25,10 @@ const mailSender = async (email, title, body) => {
             html: `${body}`,
         });
 
-        console.log("Email Sent: ", info);
+        console.log("Email Sent Successfully");
         return info;
     } catch (error) {
-        console.log("Error in mailSender: ", error.message);
+        console.log("Detailed Error in mailSender: ", error);
         return error;
     }
 }
