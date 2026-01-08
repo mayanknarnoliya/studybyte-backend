@@ -32,17 +32,17 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use(
-    cors({
-        // origin: 'https://study-notion-front-end-plum.vercel.app',
-        origin: ["https://study-notion-front-end-plum.vercel.app", "http://localhost:3000"],
-        credentials: true,
-        // Without credentials: true, cookies (such as session cookies) or other credentials would not be sent in cross-origin requests.
-    })
+    cors({
+        // origin: 'https://study-notion-front-end-plum.vercel.app',
+        origin: ["https://study-notion-front-end-plum.vercel.app", "http://localhost:3000"],
+        credentials: true,
+        // Without credentials: true, cookies (such as session cookies) or other credentials would not be sent in cross-origin requests.
+    })
 );
 
 app.use(fileUpload({
-    useTempFiles: true,
-    tempFileDir: '/tmp',
+    useTempFiles: true,
+    tempFileDir: '/tmp',
 }));
 
 // routes
@@ -54,9 +54,9 @@ app.use('/api/v1/payment', paymentRoutes);
 app.use('/api/v1/cart', cartRoutes);
 
 app.listen(PORT, () => {
-    console.log(`App started at port: ${PORT}`);
+    console.log(`App started at port: ${PORT}`);
 });
 
 app.get('/', (req, res) => {
-    res.send(`<h1>Home page of backend</h1>`);
+    res.send(`<h1>Home page of backend</h1>`);
 });
