@@ -5,21 +5,20 @@ const mailSender = async (email, title, body) => {
     try {
         // Brevo SMTP transporter
         let transporter = nodemailer.createTransport({
-            host: process.env.MAIL_HOST,       // smtp-relay.brevo.com
-            port: process.env.MAIL_PORT,       // 587
-            secure: false,                     // TLS nahi chahiye 587 ke liye
+            host: process.env.MAIL_HOST,
+            port: process.env.MAIL_PORT,                 // env se pick karega
+            secure: process.env.MAIL_SECURE === "true",  // env ke hisaab se TLS
             auth: {
-                user: process.env.MAIL_USER,   // "apikey" (literal)
+                user: process.env.MAIL_USER,   // "apikey"
                 pass: process.env.MAIL_PASS,   // Brevo SMTP key
             },
         });
 
-        // Mail options
         let info = await transporter.sendMail({
             from: process.env.MAIL_FROM,       // StudyByte <verified-email@gmail.com>
-            to: email,                         // User ka email
+            to: email,
             subject: title,
-            html: body,                        // HTML content
+            html: body,
         });
 
         console.log("Email sent: ", info.messageId);
