@@ -1,30 +1,32 @@
 const nodemailer = require("nodemailer");
 
+// Mail sender function
 const mailSender = async (email, title, body) => {
     try {
-        // Render par timeout se bachne ke liye direct 'service' use karein
+        // Brevo SMTP transporter
         let transporter = nodemailer.createTransport({
-            service: "gmail", 
+            host: process.env.MAIL_HOST,       // smtp-relay.brevo.com
+            port: process.env.MAIL_PORT,       // 587
+            secure: false,                     // TLS nahi chahiye 587 ke liye
             auth: {
-                user: process.env.MAIL_USER,
-                pass: process.env.MAIL_PASS, // Make sure this is 16-digit App Password
+                user: process.env.MAIL_USER,   // "apikey" (literal)
+                pass: process.env.MAIL_PASS,   // Brevo SMTP key
             },
         });
 
+        // Mail options
         let info = await transporter.sendMail({
-            from: `"StudyByte" <${process.env.MAIL_USER}>`,
-            to: `${email}`,
-            subject: `${title}`,
-            html: `${body}`,
+            from: process.env.MAIL_FROM,       // StudyByte <verified-email@gmail.com>
+            to: email,                         // User ka email
+            subject: title,
+            html: body,                        // HTML content
         });
 
-        console.log("Nodemailer Info: ", info);
+        console.log("Email sent: ", info.messageId);
         return info;
-    }
-    catch (error) {
-        // Agar yahan 'ETIMEDOUT' aata hai, toh password ya network ka issue hai
-        console.log("Error in mailSender: ", error.message);
-        return null; 
+    } catch (error) {
+        console.log("Error sending mail: ", error.message);
+        return null;
     }
 }
 
