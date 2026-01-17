@@ -1,33 +1,28 @@
 const nodemailer = require("nodemailer");
 
 const mailSender = async (email, title, body) => {
-    try{
-        // Create a transporter to send emails
-        let transporter = nodemailer.createTransport({
-            host:process.env.MAIL_HOST,
-            auth:{
-                user: process.env.MAIL_USER,
-                pass: process.env.MAIL_PASS,
-            },
-            secure: false, 
-            tls: {
-            rejectUnauthorized: false
-        }
-        });
+  try {
+    let transporter = nodemailer.createTransport({
+      host: process.env.MAIL_HOST,
+      auth: {
+        user: process.env.MAIL_USER,
+        pass: process.env.MAIL_PASS,
+      },
+    });
 
-        // send mail
-        let info = await transporter.sendMail({
-            from: 'StudyByte',
-            to:`${email}`,
-            subject: `${title}`,
-            html: `${body}`,
-        })
-        console.log(info);
-        return info;
-    }
-    catch(error) {
-        console.log(error.message);
-    }
-}
+    let info = await transporter.sendMail({
+      from: `"StudyByte" <${process.env.MAIL_USER}>`,
+      to: `${email}`,
+      subject: `${title}`,
+      html: `${body}`,
+    });
+
+    console.log("Nodemailer Info: ", info);
+    return info; // This must be returned for OTP.js to see it
+  } catch (error) {
+    console.error("Nodemailer Error: ", error.message);
+    return null; // Return null so the calling function knows it failed
+  }
+};
 
 module.exports = mailSender;
